@@ -5,6 +5,7 @@
     </nav-bar>
     <home-swiper :banners="banners"></home-swiper>
     <home-recommend :recommends="recommends"/>
+    <home-feature/>
   </div>
 </template>
 
@@ -12,6 +13,7 @@
   import NavBar from 'components/common/navbar/NavBar'
   import HomeSwiper from './childrenHome/HomeSwiper'
   import HomeRecommend from './childrenHome/HomeRecommend'
+  import HomeFeature from './childrenHome/HomeFeature'
   import {getHomeRequest} from "network/home";
 
   export default {
@@ -19,7 +21,8 @@
     components: {
       NavBar,
       HomeSwiper,
-      HomeRecommend
+      HomeRecommend,
+      HomeFeature
     },
     data() {
       return {
@@ -40,8 +43,16 @@
 </script>
 
 <style scoped>
+  #home{
+    padding-top: 44px;
+  }
   .center {
     background-color: var(--color-tint);
     color: white;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 10;
   }
 </style>
