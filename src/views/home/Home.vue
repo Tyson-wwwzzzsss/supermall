@@ -6,7 +6,8 @@
     <home-swiper :banners="banners"></home-swiper>
     <home-recommend :recommends="recommends"/>
     <home-feature/>
-    <tab-control class="tabControl" :titles="['流行','新款','精选']"/>
+    <tab-control class="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+    <goodslist :goods="goods[incurrentType].list"/>
     <ul>
       <li>1列表</li>
       <li>2列表</li>
@@ -68,6 +69,7 @@
   import HomeRecommend from './childrenHome/HomeRecommend'
   import HomeFeature from './childrenHome/HomeFeature'
   import TabControl from 'components/content/tabControl/TabControl'
+  import Goodslist from 'components/content/goodsList/GoodsList'
 
   import {getHomeRequest, getHomeGoodsList} from "network/home";
 
@@ -78,7 +80,8 @@
       HomeSwiper,
       HomeRecommend,
       HomeFeature,
-      TabControl
+      TabControl,
+      Goodslist
     },
     data() {
       return {
@@ -89,10 +92,27 @@
           'pop': {page: 0, list: []},
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []}
-        }
+        },
+        incurrentType: 'pop'
       }
     },
     methods: {
+      // 定义监听事件的方法
+      tabClick(index) {
+        // console.log(index);
+        switch (index) {
+          case 0:
+            this.incurrentType = 'pop'
+            break
+          case 1:
+            this.incurrentType = 'new'
+            break
+          case 2:
+            this.incurrentType = 'sell'
+            break
+        }
+      },
+      // 定义接口请求的方法
       getHomeRequestTwo() {
         getHomeRequest().then(res => {
           // console.log(res);
@@ -103,15 +123,17 @@
       },
       getHomeGoodsListTwo(type) {
         const page = this.goods[type].page + 1
-        getHomeGoodsList(type,page).then(res => {
-          console.log(res);
+        getHomeGoodsList(type, page).then(res => {
+          // console.log(res);
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
         })
       }
     },
     created() {
+      // 请求轮播图和推荐
       this.getHomeRequestTwo()
+      // 请求三类热门商品
       this.getHomeGoodsListTwo('pop')
       this.getHomeGoodsListTwo('new')
       this.getHomeGoodsListTwo('sell')
